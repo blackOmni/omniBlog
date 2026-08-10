@@ -1,0 +1,103 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  background-color: #09090b;
+  color: #f4f4f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+/* Base Card Component */
+.card,
+.app-container {
+  position: relative;
+  background-color: #121212;
+  border: 1px solid #27272a;
+  border-radius: 8px;
+  padding: 32px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Headings */
+h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #f4f4f5;
+  margin-bottom: 16px;
+  letter-spacing: -0.01em;
+}
+
+/* Status / Badge Container */
+.status-badge,
+.status-box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #18181b;
+  color: #a1a1aa;
+  border: 1px solid #27272a;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 16px;
+  width: 100%;
+}
+
+/* Active Status Dot Indicator */
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+/* Text & Descriptions */
+p {
+  color: #a1a1aa;
+  font-size: 14px;
+  line-height: 1.6;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  background-color: #09090b;
+  color: #f4f4f5;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Author Branding Label */
+.author {
+  position: absolute;
+  bottom: 14px;
+  right: 18px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #52525b;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}

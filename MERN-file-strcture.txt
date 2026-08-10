@@ -1,0 +1,38 @@
+my-mern-project/
+├── client/                     # React Frontend (Vite)
+│   ├── public/                 # Static assets directly served (favicon.ico, robots.txt)
+│   ├── src/
+│   │   ├── assets/             # Images, fonts, and icons imported into JS/JSX
+│   │   ├── components/         # Reusable UI elements
+│   │   │   ├── layout/         # Layout components (Navbar, Footer, Sidebar)
+│   │   │   └── ui/             # General UI components (Button, Input, Card, Modal)
+│   │   ├── context/            # React Context providers (AuthContext, ThemeContext)
+│   │   ├── hooks/              # Custom React hooks (useAuth, useFetch, useDebounce)
+│   │   ├── pages/              # Route view pages (Home, Login, Dashboard, NotFound)
+│   │   ├── services/           # Axios instance configuration and API request functions
+│   │   ├── utils/              # Client-side helpers (formatters, validators, constants)
+│   │   ├── App.css             # Component layout / app-wide styles
+│   │   ├── App.jsx             # Main routing setup and context wrappers
+│   │   ├── index.css           # Global CSS resets / Tailwind directives
+│   │   └── main.jsx            # React DOM render entry point
+│   ├── .env                    # Frontend env variables (VITE_API_URL=http://localhost:5000/api)
+│   ├── eslint.config.js        # ESLint rules and configuration
+│   ├── index.html              # Vite entry HTML (MUST sit in client root, not public)
+│   ├── package.json            # Frontend scripts and dependencies
+│   └── vite.config.js          # Vite config (plugins, path aliases `@/`, CORS proxies)
+│
+├── server/                     # Node.js / Express Backend
+│   ├── config/                 # Database setup (db.js) and third-party services (cloudinary, cors)
+│   ├── controllers/            # Business logic request handlers (authController.js, productController.js)
+│   ├── middleware/             # Custom middlewares (authMiddleware.js, errorMiddleware.js)
+│   ├── models/                 # Mongoose schemas (User.js, Product.js)
+│   ├── routes/                 # Express endpoint router files (authRoutes.js, productRoutes.js)
+│   ├── utils/                  # Backend utility helpers (generateToken.js, sendEmail.js)
+│   ├── validators/             # Request payload validation schemas (Zod, Joi, or Express-Validator)
+│   ├── .env                    # Secret env variables (PORT, MONGO_URI, JWT_SECRET)
+│   ├── package.json            # Backend scripts and dependencies
+│   └── server.js               # Express app initialization, middleware registration, & server listener
+│
+├── .gitignore                  # Git ignore rules (node_modules, .env, dist, build)
+├── package.json                # (Optional) Root runner using concurrently/workspaces
+└── README.md                   # Project description, API docs, and setup instructions
