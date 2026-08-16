@@ -1,0 +1,23 @@
+.header-appbar {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow) !important;
+}
+
+.header-logo {
+  text-decoration: none;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.header-nav-btn {
+  color: var(--text-primary) !important;
+  font-weight: 500 !important;
+  text-transform: none !important;
+}
+
+.header-nav-btn:hover {
+  color: var(--accent-color) !important;
+}

@@ -1,0 +1,22 @@
+.blog-card {
+  background-color: var(--card-bg) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 12px !important;
+  box-shadow: var(--shadow) !important;
+  margin: 24px auto !important;
+  max-width: 640px;
+  overflow: hidden;
+}
+
+.blog-card-header {
+  color: var(--text-primary) !important;
+}
+
+.blog-card-header .MuiCardHeader-subheader {
+  color: var(--text-secondary) !important;
+}
+
+.blog-card-content {
+  color: var(--text-secondary) !important;
+}

@@ -1,0 +1,30 @@
+.auth-container {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth-title {
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.auth-input .MuiOutlinedInput-root {
+  background-color: var(--input-bg);
+  color: var(--text-primary);
+}
+
+.auth-input .MuiInputLabel-root {
+  color: var(--text-secondary);
+}
+
+.auth-input .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-color);
+}
