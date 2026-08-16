@@ -1,3 +1,4 @@
+/* src/components/css/Header.css */
 .header-appbar {
   background-color: var(--card-bg) !important;
   color: var(--text-primary) !important;
@@ -5,19 +6,57 @@
   box-shadow: var(--shadow) !important;
 }
 
+.header-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px !important;
+}
+
+/* Left Section */
 .header-logo {
   text-decoration: none;
   color: var(--text-primary);
   font-weight: 700;
   font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+/* Center Section */
+.header-center-nav {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
 }
 
 .header-nav-btn {
   color: var(--text-primary) !important;
   font-weight: 500 !important;
   text-transform: none !important;
+  font-size: 0.95rem !important;
 }
 
 .header-nav-btn:hover {
   color: var(--accent-color) !important;
+  background-color: transparent !important;
+}
+
+/* Right Section */
+.header-right-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-toggle-btn {
+  color: var(--text-primary) !important;
+}
+
+.logout-icon-btn {
+  transition: transform 0.2s ease !important;
+}
+
+.logout-icon-btn:hover {
+  transform: scale(1.1);
 }

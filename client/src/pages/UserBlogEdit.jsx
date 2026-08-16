@@ -1,6 +1,6 @@
-// src/pages/AddBlog.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// src/pages/UserBlogEdit.jsx
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
@@ -8,22 +8,47 @@ import {
   Typography,
   Alert,
   Paper,
+  CircularProgress,
 } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutlineOutlined';
+import SaveIcon from '@mui/icons-material/Save';
 import Image from '@mui/icons-material/Image';
 import axiosInstance from '../api/axios';
 import './css/AddBlog.css';
 
-const AddBlog = () => {
+const UserBlogEdit = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+
   const [inputs, setInputs] = useState({
     title: '',
     description: '',
     image: '',
     content: '',
   });
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchBlogDetail = async () => {
+      try {
+        const res = await axiosInstance.get(`/blogs/${id}`);
+        const blogData = res.blog || res;
+        setInputs({
+          title: blogData.title || '',
+          description: blogData.description || '',
+          image: blogData.image || '',
+          content: blogData.content || '',
+        });
+      } catch (err) {
+        console.error('Failed to load blog:', err);
+        setError('Could not load blog details.');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBlogDetail();
+  }, [id]);
 
   const handleChange = (e) => {
     setInputs((prev) => ({
@@ -35,41 +60,41 @@ const AddBlog = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setSubmitting(true);
 
-    if (!inputs.title.trim() || !inputs.content.trim()) {
-      setError('Title and main content are required.');
-      return;
-    }
-
-    setLoading(true);
     try {
-      const userID = localStorage.getItem('userId');
-      await axiosInstance.post('/blogs/add', {
+      await axiosInstance.put(`/blogs/update/${id}`, {
         title: inputs.title,
         description: inputs.description,
         image: inputs.image,
         content: inputs.content,
-        user: userID,
       });
-
       navigate('/myBlogs');
     } catch (err) {
-      console.error(err);
-      setError(err.message || 'Failed to create blog post. Please try again.');
+      console.error('Update failed:', err);
+      setError(err.message || 'Failed to update blog post.');
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <Box className="user-blogs-loader">
+        <CircularProgress color="primary" />
+      </Box>
+    );
+  }
 
   return (
     <div className="add-blog-wrapper">
       <Paper elevation={0} className="add-blog-card">
         <Box className="add-blog-header">
           <Typography variant="h4" className="add-blog-title">
-            Create New Blog
+            Edit Blog Post
           </Typography>
           <Typography variant="body2" className="add-blog-subtitle">
-            Share your thoughts, stories, and ideas with the OmniBlog community
+            Update your post details and content
           </Typography>
         </Box>
 
@@ -83,7 +108,6 @@ const AddBlog = () => {
           <TextField
             name="title"
             label="Blog Title"
-            placeholder="e.g. Mastering Modern Web Development in 2026"
             value={inputs.title}
             onChange={handleChange}
             className="add-blog-input"
@@ -95,7 +119,6 @@ const AddBlog = () => {
           <TextField
             name="description"
             label="Short Description"
-            placeholder="Brief overview or teaser of your article"
             value={inputs.description}
             onChange={handleChange}
             className="add-blog-input"
@@ -108,7 +131,6 @@ const AddBlog = () => {
           <TextField
             name="image"
             label="Image URL (Optional)"
-            placeholder="https://example.com/image.jpg"
             value={inputs.image}
             onChange={handleChange}
             className="add-blog-input"
@@ -119,26 +141,9 @@ const AddBlog = () => {
             }}
           />
 
-          {inputs.image.trim() && (
-            <Box className="image-preview-wrapper">
-              <Typography variant="caption" className="preview-label">
-                Image Preview:
-              </Typography>
-              <img
-                src={inputs.image}
-                alt="Live Preview"
-                className="image-preview"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
-            </Box>
-          )}
-
           <TextField
             name="content"
             label="Blog Content"
-            placeholder="Write your complete blog post here..."
             value={inputs.content}
             onChange={handleChange}
             className="add-blog-input"
@@ -154,7 +159,7 @@ const AddBlog = () => {
               type="button"
               variant="outlined"
               className="cancel-btn"
-              onClick={() => navigate('/blogs')}
+              onClick={() => navigate('/myBlogs')}
             >
               Cancel
             </Button>
@@ -162,10 +167,10 @@ const AddBlog = () => {
               type="submit"
               variant="contained"
               className="submit-btn"
-              disabled={loading}
-              startIcon={<AddCircleOutlineIcon />}
+              disabled={submitting}
+              startIcon={<SaveIcon />}
             >
-              {loading ? 'Publishing...' : 'Publish Post'}
+              {submitting ? 'Saving...' : 'Save Changes'}
             </Button>
           </Box>
         </Box>
@@ -174,4 +179,4 @@ const AddBlog = () => {
   );
 };
 
-export default AddBlog;
+export default UserBlogEdit;

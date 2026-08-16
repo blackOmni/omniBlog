@@ -1,3 +1,4 @@
+// src/App.jsx
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
@@ -11,6 +12,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Auth from './pages/Auth';
 import AllBlogs from './pages/AllBlogs';
 import UserBlogs from './pages/UserBlogs';
+import UserBlogEdit from './pages/UserBlogEdit';
 import AddBlog from './pages/AddBlog';
 import BlogDetail from './pages/BlogDetail';
 
@@ -30,11 +32,12 @@ function App() {
   return (
     <Router>
       <Header />
-      <main>
+      <main className="app-main-content">
         <Routes>
           <Route path="/" element={<Navigate to="/blogs" replace />} />
           <Route path="/login" element={<Auth />} />
           <Route path="/blogs" element={<AllBlogs />} />
+          <Route path="/blogs/:id" element={<BlogDetail />} />
 
           {/* Protected Routes */}
           <Route
@@ -54,6 +57,14 @@ function App() {
             }
           />
           <Route
+            path="/myBlogs/edit/:id"
+            element={
+              <ProtectedRoute>
+                <UserBlogEdit />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/blogs/add"
             element={
               <ProtectedRoute>
@@ -61,6 +72,8 @@ function App() {
               </ProtectedRoute>
             }
           />
+
+          <Route path="*" element={<Navigate to="/blogs" replace />} />
         </Routes>
       </main>
     </Router>

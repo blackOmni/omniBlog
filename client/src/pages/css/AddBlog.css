@@ -1,32 +1,142 @@
-/* You can share or apply this CSS to both AddBlog and BlogDetail */
-.blog-form-container {
-  background-color: var(--card-bg);
+/* src/pages/css/AddBlog.css */
+
+.add-blog-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px 64px 24px;
+}
+
+.add-blog-card {
+  background-color: var(--card-bg) !important;
   border: 1px solid var(--border-color);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 32px;
+  border-radius: 16px !important;
+  padding: 40px;
+  box-shadow: var(--shadow) !important;
+}
+
+@media (max-width: 600px) {
+  .add-blog-card {
+    padding: 24px 16px;
+  }
+}
+
+.add-blog-header {
+  margin-bottom: 28px;
+  text-align: center;
+}
+
+.add-blog-title {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  font-size: 2rem !important;
+  margin-bottom: 8px !important;
+}
+
+.add-blog-subtitle {
+  color: var(--text-secondary) !important;
+}
+
+.add-blog-alert {
+  margin-bottom: 24px !important;
+  border-radius: 8px !important;
+}
+
+.add-blog-form {
   display: flex;
   flex-direction: column;
+  gap: 20px;
 }
 
-.blog-form-title {
-  color: var(--text-primary);
-  font-weight: 600;
-  text-align: center;
-  margin-bottom: 24px;
+/* Form Inputs Dark/Light Theme Integration */
+.add-blog-input .MuiInputBase-root {
+  background-color: var(--input-bg) !important;
+  color: var(--text-primary) !important;
+  border-radius: 10px !important;
 }
 
-.blog-form-field .MuiOutlinedInput-root {
-  background-color: var(--input-bg);
-  color: var(--text-primary);
+.add-blog-input .MuiInputLabel-root {
+  color: var(--text-secondary) !important;
 }
 
-.blog-form-field .MuiInputLabel-root {
+.add-blog-input .MuiInputLabel-root.Mui-focused {
+  color: var(--accent-color) !important;
+}
+
+.add-blog-input .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-color) !important;
+}
+
+.add-blog-input:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--text-secondary) !important;
+}
+
+.add-blog-input
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent-color) !important;
+  border-width: 2px !important;
+}
+
+.input-icon {
   color: var(--text-secondary);
+  margin-right: 8px;
 }
 
-.blog-form-field .MuiOutlinedInput-notchedOutline {
-  border-color: var(--border-color);
+/* Image Preview */
+.image-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: var(--input-bg);
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.preview-label {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Actions */
+.add-blog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.cancel-btn {
+  color: var(--text-secondary) !important;
+  border-color: var(--border-color) !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  padding: 10px 24px !important;
+}
+
+.cancel-btn:hover {
+  border-color: var(--text-secondary) !important;
+  background-color: transparent !important;
+}
+
+.submit-btn {
+  background-color: var(--accent-color) !important;
+  color: #ffffff !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  padding: 10px 28px !important;
+  font-size: 0.95rem !important;
+}
+
+.submit-btn:hover {
+  background-color: var(--accent-hover) !important;
 }

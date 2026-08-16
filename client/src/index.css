@@ -1,51 +1,74 @@
+/* src/index.css */
 :root {
-  --bg-color: #f8f9fa;
+  /* Light Theme Colors */
+  --bg-primary: #f8f9fa;
+  --bg-color: #f8f9fa; /* Backward compatibility */
   --card-bg: #ffffff;
+  --input-bg: #ffffff;
   --text-primary: #1e293b;
   --text-secondary: #64748b;
   --accent-color: #3b82f6;
   --accent-hover: #2563eb;
   --border-color: #e2e8f0;
   --shadow:
-    0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
   --danger-color: #ef4444;
   --warning-color: #f59e0b;
-  --input-bg: #ffffff;
 }
 
 body.dark-theme {
-  --bg-color: #09090b;
+  /* Dark Theme Colors (blackOmni Theme) */
+  --bg-primary: #09090b;
+  --bg-color: #09090b; /* Backward compatibility */
   --card-bg: #121212;
+  --input-bg: #18181b;
   --text-primary: #f4f4f5;
   --text-secondary: #a1a1aa;
   --accent-color: #60a5fa;
   --accent-hover: #3b82f6;
   --border-color: #27272a;
-  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
   --danger-color: #ef4444;
   --warning-color: #f59e0b;
-  --input-bg: #18181b;
 }
 
+/* Base Reset */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  transition:
-    background-color 0.25s ease,
-    color 0.25s ease;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--bg-color);
+  background-color: var(--bg-primary);
   color: var(--text-primary);
   font-family:
     -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease;
 }
 
-/* Developer Branding & Status Utilities */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* Developer Branding & Utility Classes */
 .card,
 .app-container {
   position: relative;
@@ -56,6 +79,9 @@ body {
   max-width: 420px;
   width: 100%;
   text-align: center;
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .status-badge,

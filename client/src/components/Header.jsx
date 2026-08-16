@@ -1,10 +1,21 @@
+// src/components/Header.jsx
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions, themeActions } from '../store';
-import { AppBar, Toolbar, Typography, Box, Button } from '@mui/material';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import LightModeIcon from '@mui/icons-material/LightMode';
+import LogoutIcon from '@mui/icons-material/Logout';
+import './css/Header.css';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -18,36 +29,51 @@ const Header = () => {
   };
 
   return (
-    <AppBar position="sticky" color="default">
-      <Toolbar>
+    <AppBar position="sticky" className="header-appbar" elevation={0}>
+      <Toolbar className="header-toolbar">
+        {/* Left Side: Brand Logo */}
         <Typography
           variant="h5"
           component={Link}
           to="/"
-          style={{
-            textDecoration: 'none',
-            color: 'inherit',
-            fontWeight: 'bold',
-          }}
+          className="header-logo"
         >
           OmniBlog
         </Typography>
 
-        {isLoggedIn && (
-          <Box display="flex" marginLeft="auto" marginRight="auto" gap={2}>
-            <Button component={Link} to="/blogs" color="inherit">
-              All Blogs
-            </Button>
-            <Button component={Link} to="/myBlogs" color="inherit">
-              My Blogs
-            </Button>
-            <Button component={Link} to="/blogs/add" color="inherit">
-              Add Blog
-            </Button>
-          </Box>
-        )}
+        {/* Center: Navigation Links */}
+        <Box className="header-center-nav">
+          <Button component={Link} to="/blogs" className="header-nav-btn">
+            All Blogs
+          </Button>
+          {isLoggedIn && (
+            <>
+              <Button component={Link} to="/myBlogs" className="header-nav-btn">
+                My Blogs
+              </Button>
+              <Button
+                component={Link}
+                to="/blogs/add"
+                className="header-nav-btn"
+              >
+                Add Blog
+              </Button>
+            </>
+          )}
+        </Box>
 
-        <Box display="flex" marginLeft="auto" alignItems="center" gap={1}>
+        {/* Right Side: Theme Toggle FIRST, then Logout Icon */}
+        <Box className="header-right-actions">
+          <Tooltip title={isDarkMode ? 'Light Mode' : 'Dark Mode'}>
+            <IconButton
+              onClick={() => dispatch(themeActions.toggleDarkMode())}
+              color="inherit"
+              className="theme-toggle-btn"
+            >
+              {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
+          </Tooltip>
+
           {!isLoggedIn ? (
             <Button
               onClick={() => navigate('/login')}
@@ -57,17 +83,16 @@ const Header = () => {
               Login / Signup
             </Button>
           ) : (
-            <Button onClick={handleLogout} variant="outlined" color="error">
-              Logout
-            </Button>
+            <Tooltip title="Logout">
+              <IconButton
+                onClick={handleLogout}
+                color="error"
+                className="logout-icon-btn"
+              >
+                <LogoutIcon />
+              </IconButton>
+            </Tooltip>
           )}
-
-          <Button
-            onClick={() => dispatch(themeActions.toggleDarkMode())}
-            color="inherit"
-          >
-            {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
-          </Button>
         </Box>
       </Toolbar>
     </AppBar>

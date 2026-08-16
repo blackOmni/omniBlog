@@ -1,12 +1,82 @@
-.blogs-container {
-  padding: 24px 16px;
-  max-width: 800px;
-  margin: 0 auto;
+/* src/pages/css/UserBlogs.css */
+
+.user-blogs-loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
 }
 
-.no-blogs-text {
-  color: var(--text-secondary);
+.user-blogs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.create-blog-btn {
+  background-color: var(--accent-color) !important;
+  color: #ffffff !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+}
+
+.create-blog-btn:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+/* Empty State */
+.empty-blogs-container {
   text-align: center;
-  margin-top: 48px;
-  font-size: 1.2rem;
+  padding: 64px 24px;
+  background-color: var(--card-bg);
+  border: 1px dashed var(--border-color);
+  border-radius: 16px;
+  margin-top: 24px;
+}
+
+.empty-text {
+  color: var(--text-secondary) !important;
+  margin-bottom: 16px !important;
+}
+
+.empty-create-btn {
+  color: var(--accent-color) !important;
+  border-color: var(--accent-color) !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+/* Card Action Overlay */
+.user-blog-card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.blog-card-actions-overlay {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 5;
+  display: flex;
+  gap: 6px;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 2px 6px;
+  box-shadow: var(--shadow);
+}
+
+.action-icon-btn {
+  color: var(--text-secondary) !important;
+}
+
+.action-icon-btn.edit:hover {
+  color: var(--accent-color) !important;
+}
+
+.action-icon-btn.delete:hover {
+  color: var(--danger-color) !important;
 }

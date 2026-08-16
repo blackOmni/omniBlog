@@ -1,42 +1,39 @@
+// src/pages/AllBlogs.jsx
 import React, { useEffect, useState } from 'react';
-import BlogCard from '../components/BlogCard';
 import axiosInstance from '../api/axios';
+import BlogCard from '../components/BlogCard';
+import { Box, Typography } from '@mui/material';
+import '../components/css/BlogCard.css';
 
 const AllBlogs = () => {
   const [blogs, setBlogs] = useState([]);
 
-  const fetchBlogs = async () => {
-    try {
-      const data = await axiosInstance.get('/blogs');
-      setBlogs(data.blogs || []);
-    } catch (err) {
-      console.error('Failed to fetch blogs:', err.message);
-    }
-  };
-
   useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await axiosInstance.get('/blogs');
+        setBlogs(res.blogs);
+      } catch (err) {
+        console.error(err);
+      }
+    };
     fetchBlogs();
   }, []);
 
-  const handleBlogDeleted = (deletedId) => {
-    setBlogs((prev) => prev.filter((blog) => blog._id !== deletedId));
-  };
-
   return (
-    <div>
-      {blogs.map((blog) => (
-        <BlogCard
-          key={blog._id}
-          id={blog._id}
-          title={blog.title}
-          desc={blog.desc}
-          img={blog.img}
-          userName={blog.user?.name}
-          ownerId={blog.user?._id || blog.user}
-          onDeleteSuccess={handleBlogDeleted}
-        />
-      ))}
-    </div>
+    <Box className="blogs-page-wrapper">
+      <Typography variant="h4" className="page-heading">
+        Explore Blogs
+      </Typography>
+
+      {/* Horizontal Scroll Deck */}
+      <Box className="horizontal-blogs-container">
+        {blogs &&
+          blogs.map((blog) => (
+            <BlogCard key={blog._id} blog={blog} isUser={false} />
+          ))}
+      </Box>
+    </Box>
   );
 };
 

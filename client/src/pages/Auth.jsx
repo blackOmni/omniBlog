@@ -1,9 +1,11 @@
+// src/pages/Auth.jsx
 import React, { useState } from 'react';
-import { Box, Button, TextField, Typography } from '@mui/material';
+import { Box, Button, TextField, Typography, Alert } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { authActions } from '../store';
 import axiosInstance from '../api/axios';
+import './css/Auth.css';
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -31,57 +33,65 @@ const Auth = () => {
       dispatch(authActions.login(data.user._id));
       navigate('/blogs');
     } catch (err) {
-      setError(err.message);
+      setError(
+        err.message || 'Authentication failed. Please check your credentials.'
+      );
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <Box
-        maxWidth={400}
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        margin="50px auto"
-        padding={4}
-        borderRadius={3}
-        boxShadow={3}
-      >
-        <Typography variant="h4">{isSignup ? 'Sign Up' : 'Login'}</Typography>
-        {error && (
-          <Typography color="error" mt={2}>
-            {error}
+    <div className="auth-wrapper">
+      <Box className="auth-card" component="form" onSubmit={handleSubmit}>
+        <div className="auth-header">
+          <Typography variant="h4" className="auth-title">
+            {isSignup ? 'Create Account' : 'Welcome Back'}
           </Typography>
+          <Typography variant="body2" className="auth-subtitle">
+            {isSignup
+              ? 'Sign up to start creating and sharing posts'
+              : 'Enter your credentials to access your blog account'}
+          </Typography>
+        </div>
+
+        {error && (
+          <Alert severity="error" className="auth-alert">
+            {error}
+          </Alert>
         )}
 
         {isSignup && (
           <TextField
             name="name"
-            label="Name"
+            label="Full Name"
             value={inputs.name}
             onChange={handleChange}
-            margin="normal"
+            className="auth-input"
+            variant="outlined"
             fullWidth
             required
           />
         )}
+
         <TextField
           name="email"
           type="email"
-          label="Email"
+          label="Email Address"
           value={inputs.email}
           onChange={handleChange}
-          margin="normal"
+          className="auth-input"
+          variant="outlined"
           fullWidth
           required
         />
+
         <TextField
           name="password"
           type="password"
           label="Password"
           value={inputs.password}
           onChange={handleChange}
-          margin="normal"
+          className="auth-input"
+          variant="outlined"
           fullWidth
           required
         />
@@ -89,19 +99,28 @@ const Auth = () => {
         <Button
           type="submit"
           variant="contained"
-          color="primary"
           fullWidth
-          sx={{ mt: 3 }}
+          className="auth-submit-btn"
         >
-          {isSignup ? 'Register' : 'Sign In'}
+          {isSignup ? 'Sign Up' : 'Sign In'}
         </Button>
-        <Button onClick={() => setIsSignup(!isSignup)} sx={{ mt: 1 }}>
-          {isSignup
-            ? 'Already have an account? Login'
-            : "Don't have an account? Sign Up"}
-        </Button>
+
+        <div className="auth-footer">
+          <Typography variant="body2" className="auth-toggle-text">
+            {isSignup ? 'Already have an account?' : "Don't have an account?"}
+          </Typography>
+          <Button
+            onClick={() => {
+              setIsSignup(!isSignup);
+              setError('');
+            }}
+            className="auth-toggle-btn"
+          >
+            {isSignup ? 'Log In' : 'Sign Up'}
+          </Button>
+        </div>
       </Box>
-    </form>
+    </div>
   );
 };
 
