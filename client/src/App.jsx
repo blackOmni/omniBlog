@@ -7,6 +7,7 @@ import {
   Route,
   Navigate,
 } from 'react-router-dom';
+
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
 import Auth from './pages/Auth';
@@ -34,12 +35,18 @@ function App() {
       <Header />
       <main className="app-main-content">
         <Routes>
+          {/* Default Redirect */}
           <Route path="/" element={<Navigate to="/blogs" replace />} />
+
+          {/* Authentication Routes */}
           <Route path="/login" element={<Auth />} />
+          <Route path="/auth" element={<Navigate to="/login" replace />} />
+
+          {/* Public Blog Routes */}
           <Route path="/blogs" element={<AllBlogs />} />
           <Route path="/blogs/:id" element={<BlogDetail />} />
 
-          {/* Protected Routes */}
+          {/* Protected Author Routes */}
           <Route
             path="/myBlogs"
             element={
@@ -73,6 +80,7 @@ function App() {
             }
           />
 
+          {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/blogs" replace />} />
         </Routes>
       </main>

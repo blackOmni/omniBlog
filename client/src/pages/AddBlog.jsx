@@ -1,169 +1,204 @@
 // src/pages/AddBlog.jsx
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
   TextField,
-  Typography,
-  Alert,
   Paper,
+  Alert,
+  MenuItem,
+  Grid,
 } from '@mui/material';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import Image from '@mui/icons-material/Image';
+import ImageIcon from '@mui/icons-material/Image';
 import axiosInstance from '../api/axios';
-import './css/AddBlog.css';
+import '../components/css/FormPages.css';
+
+const categories = ['General', 'Tech', 'Lifestyle', 'Design', 'Development'];
 
 const AddBlog = () => {
   const navigate = useNavigate();
+  const userId = useSelector((state) => state.auth.userId);
+
   const [inputs, setInputs] = useState({
     title: '',
     description: '',
-    image: '',
     content: '',
+    image: '',
+    category: 'General',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setInputs((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (!inputs.title.trim() || !inputs.content.trim()) {
-      setError('Title and main content are required.');
+    if (!userId) {
+      setError('You must be logged in to create a post.');
       return;
     }
 
     setLoading(true);
     try {
-      const userID = localStorage.getItem('userId');
       await axiosInstance.post('/blogs/add', {
-        title: inputs.title,
-        description: inputs.description,
-        image: inputs.image,
-        content: inputs.content,
-        user: userID,
+        ...inputs,
+        user: userId,
       });
-
       navigate('/myBlogs');
     } catch (err) {
-      console.error(err);
-      setError(err.message || 'Failed to create blog post. Please try again.');
+      setError(err.message || 'Failed to publish post.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="add-blog-wrapper">
-      <Paper elevation={0} className="add-blog-card">
-        <Box className="add-blog-header">
-          <Typography variant="h4" className="add-blog-title">
-            Create New Blog
-          </Typography>
-          <Typography variant="body2" className="add-blog-subtitle">
-            Share your thoughts, stories, and ideas with the OmniBlog community
-          </Typography>
-        </Box>
-
+    <div className="form-page-wrapper">
+      <Paper className="form-container-card wide editor-card" elevation={0}>
         {error && (
-          <Alert severity="error" className="add-blog-alert">
+          <Alert severity="error" sx={{ mb: 2 }}>
             {error}
           </Alert>
         )}
 
-        <Box component="form" onSubmit={handleSubmit} className="add-blog-form">
-          <TextField
-            name="title"
-            label="Blog Title"
-            placeholder="e.g. Mastering Modern Web Development in 2026"
-            value={inputs.title}
-            onChange={handleChange}
-            className="add-blog-input"
-            variant="outlined"
-            fullWidth
-            required
-          />
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          display="flex"
+          flexDirection="column"
+          gap={2}
+        >
+          {/* Row 1: Title (75%) & Category (25%) taking 100% full width */}
+          <Grid container spacing={2} sx={{ width: '100%', margin: 0 }}>
+            <Grid
+              item
+              xs={12}
+              sm={9}
+              sx={{ pl: '0 !important', pt: '0 !important' }}
+            >
+              <TextField
+                name="title"
+                label="Blog Title"
+                placeholder="Enter blog title..."
+                value={inputs.title}
+                onChange={handleChange}
+                required
+                fullWidth
+              />
+            </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={3}
+              sx={{
+                pr: '0 !important',
+                pt: { xs: '16px !important', sm: '0 !important' },
+              }}
+            >
+              <TextField
+                select
+                name="category"
+                label="Category"
+                value={inputs.category}
+                onChange={handleChange}
+                fullWidth
+              >
+                {categories.map((cat) => (
+                  <MenuItem key={cat} value={cat}>
+                    {cat}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+          </Grid>
 
+          {/* Short Summary */}
           <TextField
             name="description"
-            label="Short Description"
-            placeholder="Brief overview or teaser of your article"
+            label="Short Summary"
+            placeholder="Write a brief overview..."
             value={inputs.description}
             onChange={handleChange}
-            className="add-blog-input"
-            variant="outlined"
+            required
             multiline
             rows={2}
             fullWidth
           />
 
-          <TextField
-            name="image"
-            label="Image URL (Optional)"
-            placeholder="https://example.com/image.jpg"
-            value={inputs.image}
-            onChange={handleChange}
-            className="add-blog-input"
-            variant="outlined"
-            fullWidth
-            InputProps={{
-              startAdornment: <Image className="input-icon" />,
-            }}
-          />
+          {/* Image URL + Live Preview */}
+          <Box display="flex" flexDirection="column" gap={1}>
+            <TextField
+              name="image"
+              label="Cover Image URL"
+              placeholder="https://example.com/image.jpg"
+              value={inputs.image}
+              onChange={handleChange}
+              fullWidth
+            />
 
-          {inputs.image.trim() && (
-            <Box className="image-preview-wrapper">
-              <Typography variant="caption" className="preview-label">
-                Image Preview:
-              </Typography>
-              <img
-                src={inputs.image}
-                alt="Live Preview"
-                className="image-preview"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
-            </Box>
-          )}
+            {inputs.image && (
+              <Box className="image-preview-box">
+                <Box display="flex" alignItems="center" gap={1} mb={1}>
+                  <ImageIcon
+                    fontSize="small"
+                    sx={{ color: 'var(--text-secondary)' }}
+                  />
+                  <span
+                    style={{
+                      fontSize: '0.8rem',
+                      color: 'var(--text-secondary)',
+                    }}
+                  >
+                    Image Preview
+                  </span>
+                </Box>
+                <img
+                  src={inputs.image}
+                  alt="Cover Preview"
+                  className="image-preview-thumbnail"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                  }}
+                />
+              </Box>
+            )}
+          </Box>
 
+          {/* Main Content Area */}
           <TextField
             name="content"
-            label="Blog Content"
-            placeholder="Write your complete blog post here..."
+            label="Main Article Content"
+            placeholder="Write your main article content..."
             value={inputs.content}
             onChange={handleChange}
-            className="add-blog-input"
-            variant="outlined"
+            required
             multiline
             rows={10}
             fullWidth
-            required
           />
 
-          <Box className="add-blog-actions">
+          {/* Actions */}
+          <Box display="flex" justifyContent="flex-end" gap={2} mt={1}>
             <Button
-              type="button"
               variant="outlined"
-              className="cancel-btn"
+              color="inherit"
               onClick={() => navigate('/blogs')}
+              sx={{ borderRadius: '8px', textTransform: 'none' }}
             >
               Cancel
             </Button>
             <Button
               type="submit"
               variant="contained"
-              className="submit-btn"
               disabled={loading}
-              startIcon={<AddCircleOutlineIcon />}
+              className="primary-form-btn"
+              sx={{ minWidth: 140 }}
             >
               {loading ? 'Publishing...' : 'Publish Post'}
             </Button>

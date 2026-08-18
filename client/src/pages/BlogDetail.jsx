@@ -1,19 +1,24 @@
 // src/pages/BlogDetail.jsx
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import {
   Box,
   Typography,
-  CircularProgress,
-  Button,
-  Container,
   Avatar,
-  Divider,
+  IconButton,
+  Button,
+  CircularProgress,
   Alert,
+  Paper,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownAltOutlinedIcon from '@mui/icons-material/ThumbDownAltOutlined';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ShareIcon from '@mui/icons-material/Share';
 import axiosInstance from '../api/axios';
-import './css/BlogDetail.css';
+import '../components/css/BlogDetail.css';
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -23,52 +28,67 @@ const BlogDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    let isMounted = true;
+  // Reactions state
+  const [likes, setLikes] = useState(0);
+  const [dislikes, setDislikes] = useState(0);
+  const [userReaction, setUserReaction] = useState(null);
 
+  useEffect(() => {
     const fetchBlogDetail = async () => {
       try {
         setLoading(true);
         setError('');
-
         const res = await axiosInstance.get(`/blogs/${id}`);
-        // Handle various backend response wrappers safely
-        const blogData = res?.blog || res?.data?.blog || res?.data || res;
+        const data = res?.blog || res;
 
-        if (isMounted) {
-          if (blogData && typeof blogData === 'object' && blogData._id) {
-            setBlog(blogData);
-          } else {
-            setError('Blog post could not be found.');
-          }
-        }
+        setBlog(data);
+        setLikes(
+          Array.isArray(data?.likes) ? data.likes.length : data?.likes || 0
+        );
+        setDislikes(
+          Array.isArray(data?.dislikes)
+            ? data.dislikes.length
+            : data?.dislikes || 0
+        );
       } catch (err) {
-        console.error('Error fetching blog details:', err);
-        if (isMounted) {
-          setError(
-            err?.response?.data?.message ||
-              err?.message ||
-              'Failed to load blog details. Please try again.'
-          );
-        }
+        console.error('Failed to load post:', err);
+        setError(err.message || 'Unable to fetch blog details.');
       } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     };
 
-    if (id) {
-      fetchBlogDetail();
-    } else {
-      setError('Invalid Blog ID.');
-      setLoading(false);
-    }
-
-    return () => {
-      isMounted = false;
-    };
+    if (id) fetchBlogDetail();
   }, [id]);
+
+  const handleLike = () => {
+    if (userReaction === 'like') {
+      setLikes((prev) => prev - 1);
+      setUserReaction(null);
+    } else {
+      if (userReaction === 'dislike') setDislikes((prev) => prev - 1);
+      setLikes((prev) => prev + 1);
+      setUserReaction('like');
+    }
+  };
+
+  const handleDislike = () => {
+    if (userReaction === 'dislike') {
+      setDislikes((prev) => prev - 1);
+      setUserReaction(null);
+    } else {
+      if (userReaction === 'like') setLikes((prev) => prev - 1);
+      setDislikes((prev) => prev + 1);
+      setUserReaction('dislike');
+    }
+  };
+
+  const handleShare = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      alert('Link copied to clipboard!');
+    }
+  };
 
   if (loading) {
     return (
@@ -76,7 +96,7 @@ const BlogDetail = () => {
         display="flex"
         justifyContent="center"
         alignItems="center"
-        minHeight="60vh"
+        minHeight="70vh"
       >
         <CircularProgress color="primary" />
       </Box>
@@ -85,86 +105,141 @@ const BlogDetail = () => {
 
   if (error || !blog) {
     return (
-      <Container maxWidth="md" style={{ marginTop: '40px' }}>
-        <Alert severity="error" style={{ marginBottom: '20px' }}>
-          {error || 'Unable to display blog post.'}
+      <Box className="blog-detail-wrapper" textAlign="center" mt={4}>
+        <Alert severity="error" sx={{ mb: 3 }}>
+          {error || 'Blog post not found.'}
         </Alert>
         <Button
-          variant="contained"
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/blogs')}
+          className="back-link-btn"
         >
-          Go Back
+          Back to Articles
         </Button>
-      </Container>
+      </Box>
     );
   }
 
+  const authorName = blog?.user?.name || blog?.userName || 'Anonymous';
+  const authorInitial = authorName.charAt(0).toUpperCase();
+
   return (
-    <Container maxWidth="md" className="blog-detail-container">
-      <Button
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate(-1)}
-        className="back-btn"
-        sx={{ mb: 3 }}
-      >
-        Back to Posts
-      </Button>
+    <div className="blog-detail-wrapper">
+      {/* Top Navigation */}
+      <Box mb={3}>
+        <Button
+          component={Link}
+          to="/blogs"
+          startIcon={<ArrowBackIcon />}
+          className="back-link-btn"
+        >
+          Back to Articles
+        </Button>
+      </Box>
 
-      <Typography variant="h3" component="h1" className="blog-detail-title">
-        {blog.title}
-      </Typography>
+      {/* Header Info */}
+      <Box className="blog-detail-header">
+        {blog.category && (
+          <span className="blog-detail-category">{blog.category}</span>
+        )}
 
-      <Box className="blog-detail-author-info" sx={{ my: 2 }}>
-        <Avatar className="author-avatar">
-          {blog.user?.name ? blog.user.name.charAt(0).toUpperCase() : 'U'}
-        </Avatar>
-        <Box>
-          <Typography variant="subtitle1" fontWeight="600">
-            {blog.user?.name || 'Anonymous Author'}
-          </Typography>
-          {blog.createdAt && (
-            <Typography variant="caption" color="text.secondary">
-              Published on {new Date(blog.createdAt).toLocaleDateString()}
-            </Typography>
-          )}
+        <Typography variant="h3" component="h1" className="blog-detail-title">
+          {blog.title}
+        </Typography>
+
+        <Box className="blog-detail-author-row">
+          <Box className="author-info-group">
+            <Avatar className="blog-detail-avatar">{authorInitial}</Avatar>
+            <Box>
+              <Typography className="author-detail-name">
+                {authorName}
+              </Typography>
+              {blog.createdAt && (
+                <Typography className="blog-detail-date">
+                  {new Date(blog.createdAt).toLocaleDateString(undefined, {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </Typography>
+              )}
+            </Box>
+          </Box>
+
+          <IconButton onClick={handleShare} size="small" color="inherit">
+            <ShareIcon
+              fontSize="small"
+              sx={{ color: 'var(--text-secondary)' }}
+            />
+          </IconButton>
         </Box>
       </Box>
 
+      {/* Optional Feature Image */}
       {blog.image && (
-        <Box className="blog-detail-image-wrapper" sx={{ my: 3 }}>
+        <Box className="blog-detail-image-container">
           <img
             src={blog.image}
             alt={blog.title}
             className="blog-detail-image"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
           />
         </Box>
       )}
 
+      {/* Summary Highlight Box */}
       {blog.description && (
-        <Typography
-          variant="h6"
-          className="blog-detail-description"
-          color="text.secondary"
-          sx={{ mb: 3, fontStyle: 'italic' }}
-        >
-          {blog.description}
-        </Typography>
+        <Paper className="blog-detail-summary-card" elevation={0}>
+          <Typography className="blog-detail-summary-text">
+            "{blog.description}"
+          </Typography>
+        </Paper>
       )}
 
-      <Divider sx={{ mb: 4 }} />
-
-      <Typography
-        variant="body1"
-        className="blog-detail-content"
-        sx={{ lineHeight: 1.8, whitespace: 'pre-line' }}
-      >
-        {blog.content}
+      {/* Main Body Content */}
+      <Typography className="blog-detail-body">
+        {blog.content || blog.description}
       </Typography>
-    </Container>
+
+      {/* Bottom Engagement Bar */}
+      <Box className="blog-detail-actions">
+        <Box display="flex" gap={2}>
+          <IconButton
+            onClick={handleLike}
+            className={`action-pill ${userReaction === 'like' ? 'liked' : ''}`}
+          >
+            {userReaction === 'like' ? (
+              <ThumbUpIcon />
+            ) : (
+              <ThumbUpOutlinedIcon />
+            )}
+            <Typography variant="body2" fontWeight={600}>
+              {likes}
+            </Typography>
+          </IconButton>
+
+          <IconButton
+            onClick={handleDislike}
+            className={`action-pill ${userReaction === 'dislike' ? 'disliked' : ''}`}
+          >
+            {userReaction === 'dislike' ? (
+              <ThumbDownAltIcon />
+            ) : (
+              <ThumbDownAltOutlinedIcon />
+            )}
+            <Typography variant="body2" fontWeight={600}>
+              {dislikes}
+            </Typography>
+          </IconButton>
+        </Box>
+
+        <Button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="back-link-btn"
+        >
+          Back to Top
+        </Button>
+      </Box>
+    </div>
   );
 };
 

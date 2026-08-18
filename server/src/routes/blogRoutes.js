@@ -1,4 +1,5 @@
 const express = require('express');
+const blogRouter = express.Router();
 const {
   getAllBlogs,
   addBlog,
@@ -6,15 +7,15 @@ const {
   getById,
   deleteBlog,
   getByUserId,
-} = require('../controllers/blogController');
+  toggleLikeBlog,
+} = require('../controllers/blog.controller');
 
-const router = express.Router();
+blogRouter.get('/', getAllBlogs);
+blogRouter.post('/add', addBlog);
+blogRouter.put('/update/:id', updateBlog);
+blogRouter.get('/:id', getById);
+blogRouter.delete('/:id', deleteBlog);
+blogRouter.get('/user/:id', getByUserId);
+blogRouter.put('/like/:id', toggleLikeBlog);
 
-router.get('/', getAllBlogs);
-router.post('/add', addBlog);
-router.put('/update/:id', updateBlog);
-router.get('/:id', getById);
-router.delete('/:id', deleteBlog);
-router.get('/user/:id', getByUserId);
-
-module.exports = router;
+module.exports = blogRouter;

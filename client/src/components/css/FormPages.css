@@ -1,0 +1,125 @@
+/* src/components/css/FormPages.css */
+
+.form-page-wrapper {
+  padding: 40px 20px;
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-container-card {
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color);
+  border-radius: 12px !important;
+  padding: 32px !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.form-container-card.wide {
+  max-width: 640px;
+}
+
+.form-heading {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
+
+.form-subheading {
+  color: var(--text-secondary) !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 24px !important;
+}
+
+/* Form Input Field Customization for MUI inputs */
+.form-container-card .MuiInputLabel-root {
+  color: var(--text-secondary);
+}
+
+.form-container-card .MuiOutlinedInput-root {
+  color: var(--text-primary);
+  background-color: transparent;
+  border-radius: 8px;
+}
+
+.form-container-card .MuiOutlinedInput-notchedOutline {
+  border-color: var(--border-color);
+}
+
+.form-container-card
+  .MuiOutlinedInput-root:hover
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent-color);
+}
+
+.form-container-card
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: var(--accent-color);
+}
+
+/* Primary Action Buttons */
+.primary-form-btn {
+  background-color: var(--accent-color) !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  padding: 10px 16px !important;
+  border-radius: 8px !important;
+  font-size: 1rem !important;
+  margin-top: 8px !important;
+}
+
+.primary-form-btn:hover {
+  background-color: var(--accent-hover, #1565c0) !important;
+}
+
+.toggle-mode-btn {
+  color: var(--accent-color) !important;
+  text-transform: none !important;
+  font-weight: 600 !important;
+  margin-top: 16px !important;
+}
+
+.toggle-mode-btn:hover {
+  background-color: transparent !important;
+  text-decoration: underline;
+}
+
+/* src/components/css/FormPages.css */
+
+.editor-card {
+  max-width: 780px !important; /* Slightly wider workspace for content creation */
+  padding: 36px !important;
+}
+
+/* Image Preview Container */
+.image-preview-box {
+  background-color: var(--card-bg);
+  border: 1px dashed var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 4px;
+}
+
+.image-preview-thumbnail {
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+/* Enhanced Focus States for Textareas */
+.editor-card .MuiOutlinedInput-root {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.editor-card .MuiOutlinedInput-root.Mui-focused {
+  box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.12);
+}

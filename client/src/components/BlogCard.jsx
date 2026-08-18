@@ -19,15 +19,21 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import './css/BlogCard.css';
 
 const BlogCard = ({ blog, isUser }) => {
-  const [likes, setLikes] = useState(blog.likes || 0);
-  const [dislikes, setDislikes] = useState(blog.dislikes || 0);
+  const [likes, setLikes] = useState(
+    Array.isArray(blog?.likes) ? blog.likes.length : blog?.likes || 0
+  );
+  const [dislikes, setDislikes] = useState(
+    Array.isArray(blog?.dislikes) ? blog.dislikes.length : blog?.dislikes || 0
+  );
   const [userReaction, setUserReaction] = useState(null);
 
-  // Extract author name from population object or direct string prop
-  const authorName = blog.user?.name || blog.userName || 'Anonymous';
+  // Author details extraction
+  const authorName = blog?.user?.name || blog?.userName || 'Anonymous';
   const authorInitial = authorName.charAt(0).toUpperCase();
 
-  const handleLike = () => {
+  const handleLike = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (userReaction === 'like') {
       setLikes((prev) => prev - 1);
       setUserReaction(null);
@@ -40,7 +46,9 @@ const BlogCard = ({ blog, isUser }) => {
     }
   };
 
-  const handleDislike = () => {
+  const handleDislike = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     if (userReaction === 'dislike') {
       setDislikes((prev) => prev - 1);
       setUserReaction(null);
@@ -64,8 +72,8 @@ const BlogCard = ({ blog, isUser }) => {
           </Typography>
         </Box>
 
-        {/* Optional Image */}
-        {blog.image && (
+        {/* Optional Media Image */}
+        {blog?.image && (
           <CardMedia
             component="img"
             height="160"
@@ -77,12 +85,12 @@ const BlogCard = ({ blog, isUser }) => {
 
         {/* Title */}
         <Typography variant="h6" component="h2" className="blog-card-title">
-          {blog.title}
+          {blog?.title}
         </Typography>
 
         {/* Short Description */}
         <Typography variant="body2" className="blog-card-description">
-          {blog.description || 'No description provided.'}
+          {blog?.description || 'No description provided.'}
         </Typography>
 
         {/* Footer: Reactions & Read Link */}
@@ -117,7 +125,7 @@ const BlogCard = ({ blog, isUser }) => {
 
           <Button
             component={Link}
-            to={isUser ? `/myBlogs/${blog._id}` : `/blogs/${blog._id}`}
+            to={isUser ? `/myBlogs/${blog?._id}` : `/blogs/${blog?._id}`}
             size="small"
             endIcon={<ArrowForwardIcon />}
             className="read-more-btn"

@@ -36,6 +36,7 @@
 /* Individual Blog Card */
 .horizontal-blog-card {
   width: 100%; /* Spans full width of its grid column */
+  height: 420px; /* Uniform height for fixed row alignment */
   background-color: var(--card-bg) !important;
   border: 1px solid var(--border-color);
   border-radius: 12px !important;
@@ -53,16 +54,45 @@
   border-color: var(--accent-color);
 }
 
-.blog-card-media {
-  object-fit: cover;
-  border-bottom: 1px solid var(--border-color);
-}
-
 .blog-card-content {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  height: 100%;
   padding: 16px !important;
+  box-sizing: border-box;
+}
+
+/* Author Header Styling */
+.blog-card-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.author-avatar {
+  width: 28px !important;
+  height: 28px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  background-color: var(--accent-color) !important;
+  color: #ffffff !important;
+}
+
+.author-name {
+  color: var(--text-secondary) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 0.01em;
+}
+
+/* Image fit inside padding */
+.blog-card-media {
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .blog-card-title {
@@ -130,37 +160,4 @@
 .read-more-btn:hover {
   background-color: transparent !important;
   color: var(--accent-hover) !important;
-}
-
-/* src/components/css/BlogCard.css */
-
-/* Author Header Styling */
-.blog-card-author {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.author-avatar {
-  width: 28px !important;
-  height: 28px !important;
-  font-size: 0.85rem !important;
-  font-weight: 600 !important;
-  background-color: var(--accent-color) !important;
-  color: #ffffff !important;
-}
-
-.author-name {
-  color: var(--text-secondary) !important;
-  font-weight: 600 !important;
-  font-size: 0.85rem !important;
-  letter-spacing: 0.01em;
-}
-
-/* Updated Image fit inside padding */
-.blog-card-media {
-  object-fit: cover;
-  border-radius: 8px;
-  margin-bottom: 12px;
 }

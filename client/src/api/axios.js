@@ -1,3 +1,4 @@
+// src/api/axios.js
 import axios from 'axios';
 
 const axiosInstance = axios.create({
@@ -7,10 +8,20 @@ const axiosInstance = axios.create({
   },
 });
 
+// Response Interceptor: Automatically unpacks ApiResponse data
 axiosInstance.interceptors.response.use(
-  (response) => response.data.data,
+  (response) => {
+    // If backend uses ApiResponse wrapper: { statusCode, data, message, success }
+    if (response.data && response.data.data !== undefined) {
+      return response.data.data;
+    }
+    return response.data;
+  },
   (error) => {
-    const message = error.response?.data?.message || 'An error occurred';
+    const message =
+      error.response?.data?.message ||
+      error.message ||
+      'An unexpected error occurred.';
     return Promise.reject(new Error(message));
   }
 );
